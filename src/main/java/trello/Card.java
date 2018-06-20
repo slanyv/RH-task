@@ -2,7 +2,6 @@ package trello;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
-import sun.plugin.dom.exception.InvalidStateException;
 import utilities.Pause;
 
 import java.awt.*;
@@ -51,7 +50,7 @@ public class Card {
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
-            throw new InvalidStateException("Thread was interrupted");
+            throw new IllegalStateException("Thread was interrupted");
         }
 
         //imitate mouse events like ENTER, CTRL+C, CTRL+V
@@ -83,7 +82,7 @@ public class Card {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
-            throw new InvalidStateException("Thread was interrupted");
+            throw new IllegalStateException("Thread was interrupted");
         }
         driver.findElement(By.xpath("//*[@class=\"checklist-new-item-text js-new-checklist-item-input\"]")).sendKeys(itemName);
         driver.findElement(By.xpath("//*[@class=\"primary confirm mod-submit-edit js-add-checklist-item\"]")).click();

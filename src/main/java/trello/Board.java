@@ -2,7 +2,6 @@ package trello;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
-import sun.plugin.dom.exception.InvalidStateException;
 import utilities.Pause;
 
 /**
@@ -36,7 +35,7 @@ public class Board {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-            throw new InvalidStateException("Thread was interrupted");
+            throw new IllegalStateException("Thread was interrupted");
         }
         driver.findElement(By.xpath("//*[@class=\"subtle-input\"]")).sendKeys(boardName);
         driver.findElement(By.xpath("//*[@class=\"primary\"]")).click();

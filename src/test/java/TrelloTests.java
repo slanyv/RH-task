@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
-import sun.plugin.dom.exception.InvalidStateException;
 import trello.Board;
 import trello.Card;
 import trello.List;
@@ -116,7 +115,7 @@ public class TrelloTests {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-            throw new InvalidStateException("Thread was interrupted");
+            throw new IllegalStateException("Thread was interrupted");
         }
         Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"current markeddown hide-on-edit js-card-desc js-show-with-desc\"]//p")).getText(), is(description));
         Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"attachment-thumbnail-name js-attachment-name can-edit-attachment-title\"]")).getText(), is(fileName));
@@ -143,7 +142,7 @@ public class TrelloTests {
         try {
             Thread.sleep(8000);
         } catch (InterruptedException e) {
-            throw new InvalidStateException("Thread was interrupted");
+            throw new IllegalStateException("Thread was interrupted");
         }
         Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"board-header-btn board-header-btn-name js-rename-board\"]//span")).getText(), is(boardName));
 
@@ -155,7 +154,7 @@ public class TrelloTests {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-            throw new InvalidStateException("Thread was interrupted");
+            throw new IllegalStateException("Thread was interrupted");
         }
         card.addCard(cardName);
         card.openCard();
