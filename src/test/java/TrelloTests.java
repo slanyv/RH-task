@@ -64,7 +64,6 @@ public class TrelloTests {
         board.openNewBoardDialog();
         board.createNewBoard(boardName);
 
-        //  Pause.until(driver, 20, By.xpath("//*[@class=\"board-header-btn board-header-btn-name js-rename-board\"]//span"));
         Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"board-header-btn board-header-btn-name js-rename-board\"]//span")).getText(), is(boardName));
     }
 
@@ -111,12 +110,6 @@ public class TrelloTests {
         card.addItemToChecklist(secondItem);
         card.addComment(comment);
 
-        //Pause.until doesn't work here so I had to use Thread.sleep
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new IllegalStateException("Thread was interrupted");
-        }
         Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"current markeddown hide-on-edit js-card-desc js-show-with-desc\"]//p")).getText(), is(description));
         Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"attachment-thumbnail-name js-attachment-name can-edit-attachment-title\"]")).getText(), is(fileName));
         Assert.assertTrue(driver.findElement(By.xpath("//*[@class=\"checklist-item-details-text markeddown js-checkitem-name\" and text()=\"" + firstItem + "\"]")).getText().contains(firstItem));
@@ -138,24 +131,12 @@ public class TrelloTests {
         board.openNewBoardDialog();
         board.createNewBoard(boardName);
 
-        //Pause.until doesn't work here so I had to use Thread.sleep
-        try {
-            Thread.sleep(8000);
-        } catch (InterruptedException e) {
-            throw new IllegalStateException("Thread was interrupted");
-        }
         Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"board-header-btn board-header-btn-name js-rename-board\"]//span")).getText(), is(boardName));
 
         list.createNewList(listName);
 
         Assert.assertTrue(driver.findElement(By.xpath("//*[@class=\"list js-list-content\"][.//*[text()=\"" + listName + "\"]]")).isDisplayed());
 
-        //Pause.until doesn't work here so I had to use Thread.sleep
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new IllegalStateException("Thread was interrupted");
-        }
         card.addCard(cardName);
         card.openCard();
         card.addDescription(description);

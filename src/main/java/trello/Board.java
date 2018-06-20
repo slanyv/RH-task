@@ -39,6 +39,11 @@ public class Board {
         }
         driver.findElement(By.xpath("//*[@class=\"subtle-input\"]")).sendKeys(boardName);
         driver.findElement(By.xpath("//*[@class=\"primary\"]")).click();
-        Pause.until(driver, 20, By.xpath("//*[@class=\"board-header-btn board-header-btn-name js-rename-board\"]//span"));
+        //Pause.until doesn't work here so I had to use Thread.sleep
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            throw new IllegalStateException("Thread was interrupted");
+        }
     }
 }

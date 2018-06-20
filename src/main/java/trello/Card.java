@@ -92,5 +92,11 @@ public class Card {
         Pause.until(driver, By.xpath("//*[@class=\"comment-box-input js-new-comment-input\"]"));
         driver.findElement(By.xpath("//*[@class=\"comment-box-input js-new-comment-input\"]")).sendKeys(comment);
         driver.findElement(By.xpath("//*[@class=\"primary confirm mod-no-top-bottom-margin js-add-comment\"]")).click();
+        //Pause.until doesn't work here so I had to use Thread.sleep
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new IllegalStateException("Thread was interrupted");
+        }
     }
 }

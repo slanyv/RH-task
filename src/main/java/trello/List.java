@@ -24,5 +24,11 @@ public class List {
         Pause.until(driver, By.xpath("//*[@class=\"list-name-input\"]"));
         driver.findElement(By.xpath("//*[@class=\"list-name-input\"]")).sendKeys(listName);
         driver.findElement(By.xpath("//*[@class=\"primary mod-list-add-button js-save-edit\"]")).click();
+        //Pause.until doesn't work here so I had to use Thread.sleep
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new IllegalStateException("Thread was interrupted");
+        }
     }
 }
