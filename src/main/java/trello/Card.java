@@ -20,20 +20,20 @@ public class Card {
     }
 
     public void addCard(String cardName) {
-        driver.findElement(By.xpath(CardConstants.addNewCard)).click();
-        Pause.until(driver, By.xpath(CardConstants.cardNameField));
-        driver.findElement(By.xpath(CardConstants.cardNameField)).sendKeys(cardName);
-        driver.findElement(By.xpath(CardConstants.saveNewCard)).click();
+        driver.findElement(By.xpath(CardConstants.ADD_NEW_CARD)).click();
+        Pause.until(driver, By.xpath(CardConstants.CARD_NAME_FIELD));
+        driver.findElement(By.xpath(CardConstants.CARD_NAME_FIELD)).sendKeys(cardName);
+        driver.findElement(By.xpath(CardConstants.SAVE_NEW_CARD)).click();
     }
 
     public void openCard() {
-        driver.findElement(By.xpath(CardConstants.openCard)).click();
+        driver.findElement(By.xpath(CardConstants.OPEN_CARD)).click();
     }
 
     public void addDescription(String description) {
-        Pause.until(driver, By.xpath(CardConstants.descriptionField));
-        driver.findElement(By.xpath(CardConstants.descriptionField)).sendKeys(description);
-        driver.findElement(By.xpath(CardConstants.saveDescription)).click();
+        Pause.until(driver, By.xpath(CardConstants.DESCRIPTION_FIELD));
+        driver.findElement(By.xpath(CardConstants.DESCRIPTION_FIELD)).sendKeys(description);
+        driver.findElement(By.xpath(CardConstants.SAVE_DESCRIPTION)).click();
     }
 
     public WebElement getDescription() {
@@ -41,20 +41,20 @@ public class Card {
     }
 
     public void addAttachment(String fileName) {
-        driver.findElement(By.xpath(CardConstants.addAttachment)).click();
+        driver.findElement(By.xpath(CardConstants.ADD_ATTACHMENT)).click();
         String filePath = new File("src/main/resources/" + fileName).getAbsolutePath();
-        driver.findElement(By.xpath(CardConstants.attachmentFromPC)).sendKeys(filePath);
-        Pause.until(driver, 10, By.xpath(CardConstants.attachment));
+        driver.findElement(By.xpath(CardConstants.ATTACHMENT_FROM_PC)).sendKeys(filePath);
+        Pause.until(driver, 10, By.xpath(CardConstants.ATTACHMENT));
     }
 
     public WebElement getAttachmentByText(String attachmentName) {
-        return driver.findElement(By.xpath("//*[@class=\"attachment-thumbnail-name js-attachment-name can-edit-attachment-title\" and text()=\"" + attachmentName + "\"]"));
+        return driver.findElement(By.xpath("//*[@class=\"ATTACHMENT-thumbnail-name js-ATTACHMENT-name can-edit-ATTACHMENT-title\" and text()=\"" + attachmentName + "\"]"));
     }
 
     public void createChecklist() {
-        Pause.until(driver, By.xpath(CardConstants.createChecklist));
-        driver.findElement(By.xpath(CardConstants.createChecklist)).click();
-        driver.findElement(By.xpath(CardConstants.saveChecklist)).click();
+        Pause.until(driver, By.xpath(CardConstants.CREATE_CHECKLIST));
+        driver.findElement(By.xpath(CardConstants.CREATE_CHECKLIST)).click();
+        driver.findElement(By.xpath(CardConstants.SAVE_CHECKLIST)).click();
     }
 
     public void addItemToChecklist(String itemName) {
@@ -64,8 +64,8 @@ public class Card {
         } catch (InterruptedException e) {
             throw new IllegalStateException("Thread was interrupted");
         }
-        driver.findElement(By.xpath(CardConstants.checklistItemField)).sendKeys(itemName);
-        driver.findElement(By.xpath(CardConstants.saveChecklistItem)).click();
+        driver.findElement(By.xpath(CardConstants.CHECKLIST_ITEM_FIELD)).sendKeys(itemName);
+        driver.findElement(By.xpath(CardConstants.SAVE_CHECKLIST_ITEM)).click();
     }
 
     public WebElement getItemFromChecklistByText(String itemName) {
@@ -73,9 +73,9 @@ public class Card {
     }
 
     public void addComment(String comment) {
-        Pause.until(driver, By.xpath(CardConstants.commentField));
-        driver.findElement(By.xpath(CardConstants.commentField)).sendKeys(comment);
-        driver.findElement(By.xpath(CardConstants.saveComment)).click();
+        Pause.until(driver, By.xpath(CardConstants.COMMENT_FIELD));
+        driver.findElement(By.xpath(CardConstants.COMMENT_FIELD)).sendKeys(comment);
+        driver.findElement(By.xpath(CardConstants.SAVE_COMMENT)).click();
         //Pause.until doesn't work here so I had to use Thread.sleep
         try {
             Thread.sleep(2000);

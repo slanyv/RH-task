@@ -17,8 +17,8 @@ public class Board {
     }
 
     public void openNewBoardDialog() {
-        driver.findElement(By.xpath(BoardConstants.boardDialog)).click();
-        driver.findElement(By.xpath(BoardConstants.createNewBoardFromDialog)).click();
+        driver.findElement(By.xpath(BoardConstants.BOARD_DIALOG)).click();
+        driver.findElement(By.xpath(BoardConstants.CREATE_NEW_BOARD_FROM_DIALOG)).click();
     }
 
     public void createNewBoard(String boardName) {
@@ -28,8 +28,8 @@ public class Board {
         } catch (InterruptedException e) {
             throw new IllegalStateException("Thread was interrupted");
         }
-        driver.findElement(By.xpath(BoardConstants.boardNameField)).sendKeys(boardName);
-        driver.findElement(By.xpath(BoardConstants.boardSave)).click();
+        driver.findElement(By.xpath(BoardConstants.BOARD_NAME_FIELD)).sendKeys(boardName);
+        driver.findElement(By.xpath(BoardConstants.BOARD_SAVE)).click();
         //Pause.until doesn't work here so I had to use Thread.sleep
         try {
             Thread.sleep(10000);
@@ -39,7 +39,7 @@ public class Board {
     }
 
     public WebElement getBoardHeader() {
-        return driver.findElement(By.xpath(BoardConstants.boardName));
+        return driver.findElement(By.xpath(BoardConstants.BOARD_NAME));
     }
 
     public WebElement getListByText(String listName) {
