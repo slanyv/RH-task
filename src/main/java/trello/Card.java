@@ -4,9 +4,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
 import utilities.Pause;
 
-import java.awt.*;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.KeyEvent;
 import java.io.File;
 
 /**
@@ -39,35 +36,8 @@ public class Card {
 
     public void addAttachment(String fileName) {
         driver.findElement(By.xpath("//*[@class=\"js-attach\"]")).click();
-        driver.findElement(By.xpath("//*[@class=\"realfile\"]")).click();
-
-
-        //put path to your image in a clipboard
-        StringSelection ss = new StringSelection(new File("src/main/resources/" + fileName).getAbsolutePath());
-        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
-
-        //Pause.until doesn't work here so I had to use Thread.sleep
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            throw new IllegalStateException("Thread was interrupted");
-        }
-
-        //imitate mouse events like ENTER, CTRL+C, CTRL+V
-        Robot robot;
-        try {
-            robot = new Robot();
-        } catch (AWTException e) {
-            throw new IllegalStateException(e);
-        }
-        robot.keyPress(KeyEvent.VK_ENTER);
-        robot.keyRelease(KeyEvent.VK_ENTER);
-        robot.keyPress(KeyEvent.VK_CONTROL);
-        robot.keyPress(KeyEvent.VK_V);
-        robot.keyRelease(KeyEvent.VK_V);
-        robot.keyRelease(KeyEvent.VK_CONTROL);
-        robot.keyPress(KeyEvent.VK_ENTER);
-        robot.keyRelease(KeyEvent.VK_ENTER);
+        String filePath = new File("src/main/resources/" + fileName).getAbsolutePath();
+        driver.findElement(By.xpath("//*[@class=\"js-attach-file\"]")).sendKeys(filePath);
         Pause.until(driver, 10, By.xpath("//*[@class=\"attachment-thumbnail-details js-open-viewer\"]"));
     }
 
