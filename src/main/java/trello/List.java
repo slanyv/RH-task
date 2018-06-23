@@ -2,6 +2,7 @@ package trello;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
+import trello.Constants.ListConstants;
 import utilities.Pause;
 
 /**
@@ -16,14 +17,14 @@ public class List {
     }
 
     public void openNewList() {
-        Pause.until(driver, By.xpath("//*[@class=\"placeholder js-open-add-list\"]"));
-        driver.findElement(By.xpath("//*[@class=\"placeholder js-open-add-list\"]")).click();
+        Pause.until(driver, By.xpath(ListConstants.createNewList));
+        driver.findElement(By.xpath(ListConstants.createNewList)).click();
     }
 
     public void createNewList(String listName) {
-        Pause.until(driver, By.xpath("//*[@class=\"list-name-input\"]"));
-        driver.findElement(By.xpath("//*[@class=\"list-name-input\"]")).sendKeys(listName);
-        driver.findElement(By.xpath("//*[@class=\"primary mod-list-add-button js-save-edit\"]")).click();
+        Pause.until(driver, By.xpath(ListConstants.listNameField));
+        driver.findElement(By.xpath(ListConstants.listNameField)).sendKeys(listName);
+        driver.findElement(By.xpath(ListConstants.saveList)).click();
         //Pause.until doesn't work here so I had to use Thread.sleep
         try {
             Thread.sleep(2000);

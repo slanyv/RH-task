@@ -6,10 +6,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
 import trello.Board;
 import trello.Card;
+import trello.Constants.BoardConstants;
+import trello.Constants.CardConstants;
 import trello.List;
+import trello.Login;
 import trello.api.BoardApi;
 import trello.api.ListApi;
-import utilities.Pause;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +32,16 @@ public class TrelloTests {
     private final String propertiesFileName = "UserInfo.properties";
     private String apiKey;
     private String token;
+    private static final String API_BOARD_NAME = "new_board_created_via_api";
+    private static final String API_LIST_NAME = "new_list_created_via_api";
+    private static final String BOARD_NAME = "My test board";
+    private static final String LIST_NAME = "My test list";
+    private static final String CARD_NAME = "My test card";
+    private static final String DESCRIPTION = "Some description";
+    private static final String FILE_NAME = "manWithPipe.gif";
+    private static final String FIRST_ITEM = "First item";
+    private static final String SECOND_ITEM = "Second item";
+    private static final String COMMENT = "Some comment";
 
     @Before
     public void setUp() throws IOException {
@@ -53,105 +65,78 @@ public class TrelloTests {
         list = new List(driver);
         listApi = new ListApi();
         card = new Card(driver);
-        board.login(username, password);
-        Pause.until(driver, By.xpath("//*[@class=\"header-btn-icon icon-lg icon-board light\"]"));
+        Login login = new Login(driver);
+        login.login(username, password);
     }
 
     @Test
     public void createNewBoardTest() {
-        String boardName = "My test board";
-
         board.openNewBoardDialog();
-        board.createNewBoard(boardName);
+        board.createNewBoard(BOARD_NAME);
 
-        Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"board-header-btn board-header-btn-name js-rename-board\"]//span")).getText(), is(boardName));
+        Assert.assertThat(driver.findElement(By.xpath(BoardConstants.boardName)).getText(), is(BOARD_NAME));
     }
 
     @Test
     public void addListToExistingBoardTest() {
-        String boardName = "new_board_created_via_api";
-        String listName = "My test list";
-        String boardId = boardApi.createBoardViaAPI(boardName, apiKey, token);
+        String boardId = boardApi.createBoardViaAPI(API_BOARD_NAME, apiKey, token);
         String boardUrl = boardApi.getBoardUrlFromId(boardId, apiKey, token);
 
         driver.navigate().to(boardUrl);
         list.openNewList();
-        list.createNewList(listName);
+        list.createNewList(LIST_NAME);
 
-        Assert.assertTrue(driver.findElement(By.xpath("//*[@class=\"list js-list-content\"][.//*[text()=\"" + listName + "\"]]")).isDisplayed());
+        Assert.assertTrue(driver.findElement(By.xpath("//*[@class=\"list js-list-content\"][.//*[text()=\"" + LIST_NAME + "\"]]")).isDisplayed());
     }
 
     @Test
     public void addCardToExistingListTest() {
-        String boardName = "new_board_created_via_api";
-        String listName = "new_list_created_via_api";
-        String cardName = "New card name";
-        String description = "Some description";
-        String fileName = "manWithPipe.gif";
-        String firstItem = "First item";
-        String secondItem = "Second item";
-        String comment = "Some comment";
-
-        String boardId = boardApi.createBoardViaAPI(boardName, apiKey, token);
+        String boardId = boardApi.createBoardViaAPI(API_BOARD_NAME, apiKey, token);
         String boardUrl = boardApi.getBoardUrlFromId(boardId, apiKey, token);
-        listApi.createListViaAPI(listName, boardId, apiKey, token);
+        listApi.createListViaAPI(API_LIST_NAME, boardId, apiKey, token);
 
         driver.navigate().to(boardUrl);
-        Pause.until(driver, By.xpath("//*[@class=\"placeholder js-open-add-list\"]"));
-        card.addCard(cardName);
+        card.addCard(CARD_NAME);
         card.openCard();
-        Pause.until(driver, By.xpath("//*[@class=\"primary confirm mod-no-top-bottom-margin js-add-comment\"]"));
-        card.addDescription(description);
-        card.addAttachment(fileName);
-        Pause.until(driver, 10, By.xpath("//*[@class=\"attachment-thumbnail-details js-open-viewer\"]"));
+        card.addDescription(DESCRIPTION);
+        card.addAttachment(FILE_NAME);
         card.createChecklist();
-        Pause.until(driver, By.xpath("//*[@class=\"current hide-on-edit\"]"));
-        card.addItemToChecklist(firstItem);
-        card.addItemToChecklist(secondItem);
-        card.addComment(comment);
+        card.addItemToChecklist(FIRST_ITEM);
+        card.addItemToChecklist(SECOND_ITEM);
+        card.addComment(COMMENT);
 
-        Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"current markeddown hide-on-edit js-card-desc js-show-with-desc\"]//p")).getText(), is(description));
-        Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"attachment-thumbnail-name js-attachment-name can-edit-attachment-title\"]")).getText(), is(fileName));
-        Assert.assertTrue(driver.findElement(By.xpath("//*[@class=\"checklist-item-details-text markeddown js-checkitem-name\" and text()=\"" + firstItem + "\"]")).getText().contains(firstItem));
-        Assert.assertTrue(driver.findElement(By.xpath("//*[@class=\"checklist-item-details-text markeddown js-checkitem-name\" and text()=\"" + secondItem + "\"]")).getText().contains(secondItem));
-        Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"card-detail-window u-clearfix\"]//*[@class=\"current-comment js-friendly-links js-open-card\"]")).getText(), is(comment));
+        Assert.assertThat(driver.findElement(By.xpath(CardConstants.description)).getText(), is(DESCRIPTION));
+        Assert.assertThat(driver.findElement(By.xpath(CardConstants.attachment)).getText(), is(FILE_NAME));
+        Assert.assertTrue(driver.findElement(By.xpath("//*[@class=\"checklist-item-details-text markeddown js-checkitem-name\" and text()=\"" + FIRST_ITEM + "\"]")).getText().contains(FILE_NAME));
+        Assert.assertTrue(driver.findElement(By.xpath("//*[@class=\"checklist-item-details-text markeddown js-checkitem-name\" and text()=\"" + SECOND_ITEM + "\"]")).getText().contains(SECOND_ITEM));
+        Assert.assertThat(driver.findElement(By.xpath(CardConstants.comment)).getText(), is(COMMENT));
     }
 
     @Test
     public void completeFlowTest() {
-        String boardName = "My test board";
-        String listName = "My test list";
-        String cardName = "My test card";
-        String description = "Some description";
-        String fileName = "manWithPipe.gif";
-        String firstItem = "First item";
-        String secondItem = "Second item";
-        String comment = "Some comment";
-
         board.openNewBoardDialog();
-        board.createNewBoard(boardName);
+        board.createNewBoard(BOARD_NAME);
 
-        Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"board-header-btn board-header-btn-name js-rename-board\"]//span")).getText(), is(boardName));
+        Assert.assertThat(driver.findElement(By.xpath(BoardConstants.boardName)).getText(), is(BOARD_NAME));
 
-        list.createNewList(listName);
+        list.createNewList(LIST_NAME);
 
-        Assert.assertTrue(driver.findElement(By.xpath("//*[@class=\"list js-list-content\"][.//*[text()=\"" + listName + "\"]]")).isDisplayed());
+        Assert.assertTrue(driver.findElement(By.xpath("//*[@class=\"list js-list-content\"][.//*[text()=\"" + LIST_NAME + "\"]]")).isDisplayed());
 
-        card.addCard(cardName);
+        card.addCard(CARD_NAME);
         card.openCard();
-        card.addDescription(description);
-        card.addAttachment(fileName);
+        card.addDescription(DESCRIPTION);
+        card.addAttachment(FILE_NAME);
         card.createChecklist();
-        card.addItemToChecklist(firstItem);
-        card.addItemToChecklist(secondItem);
-        card.addComment(comment);
+        card.addItemToChecklist(FIRST_ITEM);
+        card.addItemToChecklist(SECOND_ITEM);
+        card.addComment(COMMENT);
 
-        Pause.until(driver, By.xpath("//*[@class=\"card-detail-window u-clearfix\"]//*[@class=\"current-comment js-friendly-links js-open-card\"]"));
-        Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"current markeddown hide-on-edit js-card-desc js-show-with-desc\"]//p")).getText(), is(description));
-        Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"attachment-thumbnail-name js-attachment-name can-edit-attachment-title\"]")).getText(), is(fileName));
-        Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"checklist-item-details-text markeddown js-checkitem-name\" and text()=\"" + firstItem + "\"]")).getText(), is(firstItem));
-        Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"checklist-item-details-text markeddown js-checkitem-name\" and text()=\"" + secondItem + "\"]")).getText(), is(secondItem));
-        Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"card-detail-window u-clearfix\"]//*[@class=\"current-comment js-friendly-links js-open-card\"]")).getText(), is(comment));
+        Assert.assertThat(driver.findElement(By.xpath(CardConstants.description)).getText(), is(DESCRIPTION));
+        Assert.assertThat(driver.findElement(By.xpath(CardConstants.attachment)).getText(), is(FILE_NAME));
+        Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"checklist-item-details-text markeddown js-checkitem-name\" and text()=\"" + FIRST_ITEM + "\"]")).getText(), is(FIRST_ITEM));
+        Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"checklist-item-details-text markeddown js-checkitem-name\" and text()=\"" + FIRST_ITEM + "\"]")).getText(), is(SECOND_ITEM));
+        Assert.assertThat(driver.findElement(By.xpath(CardConstants.comment)).getText(), is(COMMENT));
     }
 
     @After
