@@ -2,12 +2,9 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
 import trello.Board;
 import trello.Card;
-import trello.Constants.BoardConstants;
-import trello.Constants.CardConstants;
 import trello.List;
 import trello.Login;
 import trello.api.BoardApi;
@@ -74,7 +71,7 @@ public class TrelloTests {
         board.openNewBoardDialog();
         board.createNewBoard(BOARD_NAME);
 
-        Assert.assertThat(driver.findElement(By.xpath(BoardConstants.boardName)).getText(), is(BOARD_NAME));
+        Assert.assertThat(board.getBoardHeader().getText(), is(BOARD_NAME));
     }
 
     @Test
@@ -82,11 +79,11 @@ public class TrelloTests {
         String boardId = boardApi.createBoardViaAPI(API_BOARD_NAME, apiKey, token);
         String boardUrl = boardApi.getBoardUrlFromId(boardId, apiKey, token);
 
-        driver.navigate().to(boardUrl);
+        board.goTo(boardUrl);
         list.openNewList();
         list.createNewList(LIST_NAME);
 
-        Assert.assertTrue(driver.findElement(By.xpath("//*[@class=\"list js-list-content\"][.//*[text()=\"" + LIST_NAME + "\"]]")).isDisplayed());
+        Assert.assertTrue(board.getListByText(LIST_NAME).isDisplayed());
     }
 
     @Test
@@ -95,8 +92,11 @@ public class TrelloTests {
         String boardUrl = boardApi.getBoardUrlFromId(boardId, apiKey, token);
         listApi.createListViaAPI(API_LIST_NAME, boardId, apiKey, token);
 
-        driver.navigate().to(boardUrl);
+        board.goTo(boardUrl);
         card.addCard(CARD_NAME);
+
+        Assert.assertNotNull(list.getCardByText(CARD_NAME));
+
         card.openCard();
         card.addDescription(DESCRIPTION);
         card.addAttachment(FILE_NAME);
@@ -105,11 +105,11 @@ public class TrelloTests {
         card.addItemToChecklist(SECOND_ITEM);
         card.addComment(COMMENT);
 
-        Assert.assertThat(driver.findElement(By.xpath(CardConstants.description)).getText(), is(DESCRIPTION));
-        Assert.assertThat(driver.findElement(By.xpath(CardConstants.attachment)).getText(), is(FILE_NAME));
-        Assert.assertTrue(driver.findElement(By.xpath("//*[@class=\"checklist-item-details-text markeddown js-checkitem-name\" and text()=\"" + FIRST_ITEM + "\"]")).getText().contains(FILE_NAME));
-        Assert.assertTrue(driver.findElement(By.xpath("//*[@class=\"checklist-item-details-text markeddown js-checkitem-name\" and text()=\"" + SECOND_ITEM + "\"]")).getText().contains(SECOND_ITEM));
-        Assert.assertThat(driver.findElement(By.xpath(CardConstants.comment)).getText(), is(COMMENT));
+        Assert.assertThat(card.getDescription().getText(), is(DESCRIPTION));
+        Assert.assertNotNull(card.getAttachmentByText(FILE_NAME));
+        Assert.assertNotNull(card.getItemFromChecklistByText(FIRST_ITEM));
+        Assert.assertNotNull(card.getItemFromChecklistByText(SECOND_ITEM));
+        Assert.assertNotNull(card.getCommentByText(COMMENT));
     }
 
     @Test
@@ -117,13 +117,16 @@ public class TrelloTests {
         board.openNewBoardDialog();
         board.createNewBoard(BOARD_NAME);
 
-        Assert.assertThat(driver.findElement(By.xpath(BoardConstants.boardName)).getText(), is(BOARD_NAME));
+        Assert.assertThat(board.getBoardHeader().getText(), is(BOARD_NAME));
 
         list.createNewList(LIST_NAME);
 
-        Assert.assertTrue(driver.findElement(By.xpath("//*[@class=\"list js-list-content\"][.//*[text()=\"" + LIST_NAME + "\"]]")).isDisplayed());
+        Assert.assertTrue(board.getListByText(LIST_NAME).isDisplayed());
 
         card.addCard(CARD_NAME);
+
+        Assert.assertNotNull(list.getCardByText(CARD_NAME));
+
         card.openCard();
         card.addDescription(DESCRIPTION);
         card.addAttachment(FILE_NAME);
@@ -132,11 +135,11 @@ public class TrelloTests {
         card.addItemToChecklist(SECOND_ITEM);
         card.addComment(COMMENT);
 
-        Assert.assertThat(driver.findElement(By.xpath(CardConstants.description)).getText(), is(DESCRIPTION));
-        Assert.assertThat(driver.findElement(By.xpath(CardConstants.attachment)).getText(), is(FILE_NAME));
-        Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"checklist-item-details-text markeddown js-checkitem-name\" and text()=\"" + FIRST_ITEM + "\"]")).getText(), is(FIRST_ITEM));
-        Assert.assertThat(driver.findElement(By.xpath("//*[@class=\"checklist-item-details-text markeddown js-checkitem-name\" and text()=\"" + FIRST_ITEM + "\"]")).getText(), is(SECOND_ITEM));
-        Assert.assertThat(driver.findElement(By.xpath(CardConstants.comment)).getText(), is(COMMENT));
+        Assert.assertThat(card.getDescription().getText(), is(DESCRIPTION));
+        Assert.assertNotNull(card.getAttachmentByText(FILE_NAME));
+        Assert.assertNotNull(card.getItemFromChecklistByText(FIRST_ITEM));
+        Assert.assertNotNull(card.getItemFromChecklistByText(SECOND_ITEM));
+        Assert.assertNotNull(card.getCommentByText(COMMENT));
     }
 
     @After

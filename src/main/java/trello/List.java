@@ -1,6 +1,7 @@
 package trello;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import trello.Constants.ListConstants;
 import utilities.Pause;
@@ -31,5 +32,9 @@ public class List {
         } catch (InterruptedException e) {
             throw new IllegalStateException("Thread was interrupted");
         }
+    }
+
+    public WebElement getCardByText(String cardName) {
+        return driver.findElement(By.xpath("//*[@class=\"list-card-title js-card-name\" and text()=\"" + cardName + "\"]"));
     }
 }

@@ -1,6 +1,7 @@
 package trello;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import trello.Constants.BoardConstants;
 
@@ -35,5 +36,17 @@ public class Board {
         } catch (InterruptedException e) {
             throw new IllegalStateException("Thread was interrupted");
         }
+    }
+
+    public WebElement getBoardHeader() {
+        return driver.findElement(By.xpath(BoardConstants.boardName));
+    }
+
+    public WebElement getListByText(String listName) {
+        return driver.findElement(By.xpath("//*[@class=\"list js-list-content\"][.//*[text()=\"" + listName + "\"]]"));
+    }
+
+    public void goTo(String url) {
+        driver.navigate().to(url);
     }
 }

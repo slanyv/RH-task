@@ -1,6 +1,7 @@
 package trello;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import trello.Constants.CardConstants;
 import utilities.Pause;
@@ -35,11 +36,19 @@ public class Card {
         driver.findElement(By.xpath(CardConstants.saveDescription)).click();
     }
 
+    public WebElement getDescription() {
+        return driver.findElement(By.xpath("//*[@class=\"current markeddown hide-on-edit js-card-desc js-show-with-desc\"]//p"));
+    }
+
     public void addAttachment(String fileName) {
         driver.findElement(By.xpath(CardConstants.addAttachment)).click();
         String filePath = new File("src/main/resources/" + fileName).getAbsolutePath();
         driver.findElement(By.xpath(CardConstants.attachmentFromPC)).sendKeys(filePath);
         Pause.until(driver, 10, By.xpath(CardConstants.attachment));
+    }
+
+    public WebElement getAttachmentByText(String attachmentName) {
+        return driver.findElement(By.xpath("//*[@class=\"attachment-thumbnail-name js-attachment-name can-edit-attachment-title\" and text()=\"" + attachmentName + "\"]"));
     }
 
     public void createChecklist() {
@@ -59,6 +68,10 @@ public class Card {
         driver.findElement(By.xpath(CardConstants.saveChecklistItem)).click();
     }
 
+    public WebElement getItemFromChecklistByText(String itemName) {
+        return driver.findElement(By.xpath("//*[@class=\"checklist-item-details-text markeddown js-checkitem-name\" and text()=\"" + itemName + "\"]"));
+    }
+
     public void addComment(String comment) {
         Pause.until(driver, By.xpath(CardConstants.commentField));
         driver.findElement(By.xpath(CardConstants.commentField)).sendKeys(comment);
@@ -69,5 +82,9 @@ public class Card {
         } catch (InterruptedException e) {
             throw new IllegalStateException("Thread was interrupted");
         }
+    }
+
+    public WebElement getCommentByText(String commentName) {
+        return driver.findElement(By.xpath("//*[@class=\"card-detail-window u-clearfix\"]//*[@class=\"current-comment js-friendly-links js-open-card\" and .//text()=\"" + commentName + "\"]"));
     }
 }
