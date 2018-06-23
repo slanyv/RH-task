@@ -2,6 +2,8 @@ package trello;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
+import trello.Constants.BoardConstants;
+import trello.Constants.LoginConstants;
 import utilities.Pause;
 
 /**
@@ -16,12 +18,11 @@ public class Login {
     }
 
     public void login(String userName, String password) {
-        driver.navigate().to("https://trello.com/");
-        Pause.until(driver, By.xpath("//*[@href=\"/login\"]"));
-        driver.findElement(By.xpath("//*[@href=\"/login\"]")).click();
-        driver.findElement(By.id("user")).sendKeys(userName);
-        driver.findElement(By.id("password")).sendKeys(password);
-        driver.findElement(By.id("login")).click();
-        Pause.until(driver, By.xpath("//*[@class=\"header-btn-icon icon-lg icon-board light\"]"));
+        driver.navigate().to(LoginConstants.HOME_PAGE_URL);
+        driver.findElement(By.xpath(LoginConstants.LOGIN_BUTTON)).click();
+        driver.findElement(By.id(LoginConstants.USER)).sendKeys(userName);
+        driver.findElement(By.id(LoginConstants.PASSWORD)).sendKeys(password);
+        driver.findElement(By.id(LoginConstants.SUBMIT_LOGGIN)).click();
+        Pause.untilWithXPath(driver, By.xpath(BoardConstants.BOARD_DIALOG));
     }
 }

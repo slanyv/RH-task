@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import trello.Constants.BoardConstants;
+import utilities.Pause;
 
 /**
  * @author Viktor Slany
@@ -22,20 +23,10 @@ public class Board {
     }
 
     public void createNewBoard(String boardName) {
-        //Pause.until doesn't work here so I had to use Thread.sleep
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new IllegalStateException("Thread was interrupted");
-        }
+        Pause.untilWithXPath(driver, By.xpath(BoardConstants.BOARD_BACKGROUND_BUTTON));
         driver.findElement(By.xpath(BoardConstants.BOARD_NAME_FIELD)).sendKeys(boardName);
         driver.findElement(By.xpath(BoardConstants.BOARD_SAVE)).click();
-        //Pause.until doesn't work here so I had to use Thread.sleep
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            throw new IllegalStateException("Thread was interrupted");
-        }
+        Pause.untilWithXPath(driver,10, By.xpath(BoardConstants.BOARD_NAME));
     }
 
     public WebElement getBoardHeader() {
