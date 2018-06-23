@@ -15,14 +15,16 @@ public class ListApi {
      *
      * @param listName name of the list
      * @param boardId  Id of the board
-     * @param apiKey   API key
-     * @param token    token
      * @return Id of the created list
      */
     public String createListViaAPI(String listName, String boardId, String apiKey, String token) {
         HttpResponse<JsonNode> response;
         try {
-            response = Unirest.post("https://api.trello.com/1/lists?name=" + listName + "&idBoard=" + boardId + "&key=" + apiKey + "&token=" + token)
+            response = Unirest.post("https://api.trello.com/1/lists")
+                    .queryString("name", listName)
+                    .queryString("idBoard", boardId)
+                    .queryString("key", apiKey)
+                    .queryString("token", token)
                     .asJson();
         } catch (UnirestException e) {
             throw new IllegalStateException(e);

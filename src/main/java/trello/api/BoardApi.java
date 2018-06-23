@@ -21,8 +21,10 @@ public class BoardApi {
     public String createBoardViaAPI(String boardName, String apiKey, String token) {
         HttpResponse<JsonNode> response;
         try {
-            response = Unirest.post("https://api.trello.com/1/boards/" +
-                    "?name=" + boardName + "&key=" + apiKey + "&token=" + token)
+            response = Unirest.post("https://api.trello.com/1/boards/")
+                    .queryString("name", boardName)
+                    .queryString("key", apiKey)
+                    .queryString("token", token)
                     .asJson();
         } catch (UnirestException e) {
             throw new IllegalStateException(e);
@@ -44,8 +46,10 @@ public class BoardApi {
     public String getBoardUrlFromId(String boardId, String apiKey, String token) {
         HttpResponse<JsonNode> response;
         try {
-            response = Unirest.get("https://api.trello.com/1/boards/" +
-                    boardId + "?key=" + apiKey + "&token=" + token)
+            response = Unirest.get("https://api.trello.com/1/boards/" + boardId)
+                    //todo
+                    .queryString("key", apiKey)
+                    .queryString("token", token)
                     .asJson();
         } catch (UnirestException e) {
             throw new IllegalStateException(e);

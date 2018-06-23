@@ -26,11 +26,11 @@ public class Board {
         Pause.untilWithXPath(driver, By.xpath(BoardConstants.BOARD_BACKGROUND_BUTTON));
         driver.findElement(By.xpath(BoardConstants.BOARD_NAME_FIELD)).sendKeys(boardName);
         driver.findElement(By.xpath(BoardConstants.BOARD_SAVE)).click();
-        Pause.untilWithXPath(driver,10, By.xpath(BoardConstants.BOARD_NAME));
+        Pause.untilWithXPath(driver,10, By.xpath(BoardConstants.BOARD_HEADER_NAME));
     }
 
     public WebElement getBoardHeader() {
-        return driver.findElement(By.xpath(BoardConstants.BOARD_NAME));
+        return driver.findElement(By.xpath(BoardConstants.BOARD_HEADER_NAME));
     }
 
     public WebElement getListByText(String listName) {
