@@ -17,18 +17,15 @@ public class List {
     }
 
     public void openNewList() {
-        //Pause.untilWithXPath(driver, By.xpath(ListConstants.CREATE_NEW_LIST));
         driver.findElement(By.xpath(ListConstants.CREATE_NEW_LIST)).click();
     }
 
     public void createNewList(String listName) {
-        //Pause.untilWithXPath(driver, By.xpath(ListConstants.LIST_NAME_FIELD));
         driver.findElement(By.xpath(ListConstants.LIST_NAME_FIELD)).sendKeys(listName);
         driver.findElement(By.xpath(ListConstants.SAVE_LIST)).click();
-        //Pause.untilWithXPath(driver, By.xpath(ListConstants.LIST));
     }
 
     public WebElement getCardByText(String cardName) {
-        return driver.findElement(By.xpath("//*[contains(@class,\"list-card\") and text()=\"" + cardName + "\"]"));
+        return driver.findElement(ListConstants.getCardByName(cardName));
     }
 }

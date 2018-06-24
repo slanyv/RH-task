@@ -54,6 +54,9 @@ public class BoardApi {
         } catch (UnirestException e) {
             throw new IllegalStateException(e);
         }
+        if (response.getStatus() != 200) {
+            throw new IllegalStateException("Request failed");
+        }
         return response.getBody().getObject().get("shortUrl").toString();
     }
 }

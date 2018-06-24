@@ -12,6 +12,7 @@ import trello.List;
 import trello.Login;
 import trello.api.BoardApi;
 import trello.api.ListApi;
+import utilities.Navigate;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,15 +24,20 @@ import static org.hamcrest.core.Is.is;
  * @author Viktor Slany
  */
 public class TrelloTests {
+
     private ChromeDriver driver;
     private Board board;
     private BoardApi boardApi;
     private List list;
     private ListApi listApi;
     private Card card;
-    private final String propertiesFileName = "UserInfo.properties";
+
     private String apiKey;
     private String token;
+
+    private final String PROPERTIES_FILE_NAME = "UserInfo.properties";
+    private final String CHROME_DRIVER_PATH = "src/main/resources/chromedriver.exe";
+    private final String CHROME_DRIVER_PROPERTY = "webdriver.chrome.driver";
 
     @Before
     public void setUp() throws IOException {
@@ -39,7 +45,7 @@ public class TrelloTests {
         String password;
         Properties properties = new Properties();
 
-        try (InputStream fis = TrelloTests.class.getClassLoader().getResourceAsStream(propertiesFileName)) {
+        try (InputStream fis = TrelloTests.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE_NAME)) {
             properties.load(fis);
             apiKey = properties.getProperty("apiKey");
             token = properties.getProperty("token");
@@ -47,11 +53,11 @@ public class TrelloTests {
             password = properties.getProperty("password");
         }
 
-        System.setProperty("webdriver.chrome.driver",
-                "src/main/resources/chromedriver.exe");
+        System.setProperty(CHROME_DRIVER_PROPERTY, CHROME_DRIVER_PATH);
 
         driver = new ChromeDriver();
         driver.manage().window().maximize();
+
         board = new Board(driver);
         boardApi = new BoardApi();
         list = new List(driver);
@@ -75,7 +81,7 @@ public class TrelloTests {
         String boardId = boardApi.createBoardViaAPI(BoardConstants.API_BOARD_NAME, apiKey, token);
         String boardUrl = boardApi.getBoardUrlFromId(boardId, apiKey, token);
 
-        board.goTo(boardUrl);
+        Navigate.to(driver, boardUrl);
         list.openNewList();
         list.createNewList(ListConstants.LIST_NAME);
 
@@ -88,20 +94,20 @@ public class TrelloTests {
         String boardUrl = boardApi.getBoardUrlFromId(boardId, apiKey, token);
         listApi.createListViaAPI(ListConstants.API_LIST_NAME, boardId, apiKey, token);
 
-        board.goTo(boardUrl);
+        Navigate.to(driver, boardUrl);
         card.addCard(CardConstants.CARD_NAME);
 
         Assert.assertNotNull(list.getCardByText(CardConstants.CARD_NAME));
 
-        card.openCard();
-        card.addDescription(CardConstants.DESCRIPTION);
+        card.openCard(CardConstants.CARD_NAME);
+        card.addDescription(CardConstants.DESCRIPTION_TEXT);
         card.addAttachment(CardConstants.ATTACHMENT_FILE_NAME);
         card.createChecklist();
         card.addItemToChecklist(CardConstants.FIRST_ITEM);
         card.addItemToChecklist(CardConstants.SECOND_ITEM);
         card.addComment(CardConstants.COMMENT_TEXT);
 
-        Assert.assertThat(card.getDescription().getText(), is(CardConstants.DESCRIPTION));
+        Assert.assertThat(card.getDescription().getText(), is(CardConstants.DESCRIPTION_TEXT));
         Assert.assertNotNull(card.getAttachmentByText(CardConstants.ATTACHMENT_FILE_NAME));
         Assert.assertNotNull(card.getItemFromChecklistByText(CardConstants.FIRST_ITEM));
         Assert.assertNotNull(card.getItemFromChecklistByText(CardConstants.SECOND_ITEM));
@@ -123,15 +129,15 @@ public class TrelloTests {
 
         Assert.assertNotNull(list.getCardByText(CardConstants.CARD_NAME));
 
-        card.openCard();
-        card.addDescription(CardConstants.DESCRIPTION);
+        card.openCard(CardConstants.CARD_NAME);
+        card.addDescription(CardConstants.DESCRIPTION_TEXT);
         card.addAttachment(CardConstants.ATTACHMENT_FILE_NAME);
         card.createChecklist();
         card.addItemToChecklist(CardConstants.FIRST_ITEM);
         card.addItemToChecklist(CardConstants.SECOND_ITEM);
         card.addComment(CardConstants.COMMENT_TEXT);
 
-        Assert.assertThat(card.getDescription().getText(), is(CardConstants.DESCRIPTION));
+        Assert.assertThat(card.getDescription().getText(), is(CardConstants.DESCRIPTION_TEXT));
         Assert.assertNotNull(card.getAttachmentByText(CardConstants.ATTACHMENT_FILE_NAME));
         Assert.assertNotNull(card.getItemFromChecklistByText(CardConstants.FIRST_ITEM));
         Assert.assertNotNull(card.getItemFromChecklistByText(CardConstants.SECOND_ITEM));

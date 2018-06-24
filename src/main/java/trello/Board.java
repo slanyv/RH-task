@@ -26,7 +26,7 @@ public class Board {
         Pause.untilWithXPath(driver, By.xpath(BoardConstants.BOARD_BACKGROUND_BUTTON));
         driver.findElement(By.xpath(BoardConstants.BOARD_NAME_FIELD)).sendKeys(boardName);
         driver.findElement(By.xpath(BoardConstants.BOARD_SAVE)).click();
-        Pause.untilWithXPath(driver,10, By.xpath(BoardConstants.BOARD_HEADER_NAME));
+        Pause.untilWithXPath(driver, 10, By.xpath(BoardConstants.BOARD_HEADER_NAME));
     }
 
     public WebElement getBoardHeader() {
@@ -34,10 +34,6 @@ public class Board {
     }
 
     public WebElement getListByText(String listName) {
-        return driver.findElement(By.xpath("//*[@class=\"list js-list-content\"][.//*[text()=\"" + listName + "\"]]"));
-    }
-
-    public void goTo(String url) {
-        driver.navigate().to(url);
+        return driver.findElement(BoardConstants.getListByName(listName));
     }
 }

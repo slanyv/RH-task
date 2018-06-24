@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import trello.Constants.CardConstants;
+import trello.Constants.ListConstants;
 import utilities.Pause;
 
 import java.io.File;
@@ -26,8 +27,8 @@ public class Card {
         driver.findElement(By.xpath(CardConstants.SAVE_NEW_CARD)).click();
     }
 
-    public void openCard() {
-        driver.findElement(By.xpath(CardConstants.OPEN_CARD)).click();
+    public void openCard(String cardName) {
+        driver.findElement(ListConstants.getCardByName(cardName)).click();
     }
 
     public void addDescription(String description) {
@@ -42,13 +43,13 @@ public class Card {
 
     public void addAttachment(String fileName) {
         driver.findElement(By.xpath(CardConstants.ADD_ATTACHMENT)).click();
-        String filePath = new File("src/main/resources/" + fileName).getAbsolutePath();
+        String filePath = new File(CardConstants.ATTACHMENT_PATH + fileName).getAbsolutePath();
         driver.findElement(By.xpath(CardConstants.ATTACHMENT_FROM_PC)).sendKeys(filePath);
         Pause.untilWithXPath(driver, 10, By.xpath(CardConstants.ATTACHMENT));
     }
 
     public WebElement getAttachmentByText(String attachmentName) {
-        return driver.findElement(By.xpath("//*[contains(@class,\"attachment-thumbnail-name\") and text()=\"" + attachmentName + "\"]"));
+        return driver.findElement(CardConstants.getAttachmentByName(attachmentName));
     }
 
     public void createChecklist() {
@@ -64,7 +65,7 @@ public class Card {
     }
 
     public WebElement getItemFromChecklistByText(String itemName) {
-        return driver.findElement(By.xpath("//*[contains(@class,\"checklist-item\") and text()=\"" + itemName + "\"]"));
+        return driver.findElement(CardConstants.getChecklistItemByName(itemName));
     }
 
     public void addComment(String comment) {
@@ -75,6 +76,6 @@ public class Card {
     }
 
     public WebElement getCommentByText(String commentName) {
-        return driver.findElement(By.xpath("//*[contains(@class,\"card-detail\")]//*[contains(@class,\"current-comment\") and .//text()=\"" + commentName + "\"]"));
+        return driver.findElement(CardConstants.getCommentByName(commentName));
     }
 }
